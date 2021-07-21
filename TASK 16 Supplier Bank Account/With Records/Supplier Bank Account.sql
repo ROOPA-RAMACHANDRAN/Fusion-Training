@@ -45,7 +45,7 @@ WHERE  1 = 1 --AND supp.segment1 = '1008353'
        AND ieppm.ext_pmt_party_id (+) = iepa.ext_payee_id 
        AND ipmv.payment_method_code (+) = ieppm.payment_method_code 
        AND ipy.end_date  >= (SELECT  SYSDATE  FROM   dual) 
-       AND hro.name in(:BU)
+       AND hro.name =NVL(:BU,hro.name)
 UNION ALL 
 SELECT hp.party_name                              supplier_name, 
        (SELECT attribute1 
