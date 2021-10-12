@@ -1,0 +1,32 @@
+PLC
+InstructionGrouping/Payer/Address/Country ==>PH
+InstructionGrouping/BankAccount/IBANNumber==>NULL
+InstructionGrouping/BankAccount/BankAccountCurrency/Code==>PHP
+OutboundPayment/LogicalGrouping/PaymentInformationAmountTotal
+$instrid==>13023
+InstructionGrouping/Payer/Name==>Scotts Philippines, Inc.
+OutboundPayment/SupplierorParty/Name, 0, 35)==>DHL EXPRESS (PHILIPPINES) CORP.
+OutboundPayment/SupplierorParty/Name, 0, 35)==>DHL EXPRESS (PHILIPPINES) CORP.
+OutboundPayment/SupplierorParty/Address/AddressLine1, 0, 50)==>2306 Chino roces Ave.,
+OutboundPayment/SupplierorParty/Address/City, 0, 10)        ==>Makati City
+OutboundPayment/SupplierorParty/Address/PostalCode, 0, 8)   ==>1227
+OutboundPayment/SupplierorParty/Address/Country                       ==>PH
+OutboundPayment/Payee/RemitAdviceDeliveryMethod==>EMAILPDF
+PaymentDate==>2020-08-18
+substring(SupplierorParty/Name, 0, 35)==>DHL EXPRESS (PHILIPPINES) CORP.
+Payee/TaxRegistrationNumber==>null
+substring(SupplierorParty/Address/AddressLine1, 0, 50)==>
+substring(SupplierorParty/Address/City, 0, 10)==>Makati City
+TaxRateCode==>STDS1
+InstructionGrouping/Payer/Name==>Scotts Philippines, Inc.
+InstructionGrouping/Payer/LegalEntityRegistrationNumber==>AS095-008251
+InstructionGrouping/Payer/Address/AddressLine1==>Basement 3, Glorietta 4, Ayala Avenue
+InstructionGrouping/Payer/Address/City==>Makati
+null
+NEW
+====
+INV
+DocumentPayable/DocumentNumber/ReferenceNumber==>MNLR001970
+DocumentDate==>2020-08-17
+TotalDocumentAmount/Value==>980
+TotalDocumentAmount/Currency/Code==>PHP
