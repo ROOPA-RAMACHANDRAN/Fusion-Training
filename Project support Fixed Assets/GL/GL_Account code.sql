@@ -38,8 +38,20 @@ AND GJH.JE_CATEGORY=GJC.JE_CATEGORY_NAME
 AND GJC.JE_CATEGORY_NAME='Accrual'
 AND GB.ACTUAL_FLAG='A'
 AND GB.CURRENCY_CODE IN ('SGD','USD')
---AND GB.PERIOD_NAME IN (SELECT PERIOD_NAME FROM GL_BALANCES WHERE SUBSTR(PERIOD_NAME,5,2) = SUBSTR(:PERIOD_NAME,5,2))
-AND GB.PERIOD_NAME = :P_PERIOD_NAME
+AND GB.PERIOD_NAME IN 
+(SELECT PERIOD_NAME FROM GL_BALANCES WHERE SUBSTR(PERIOD_NAME,5,2) = SUBSTR(:P_PERIOD_NAME,5,2)
+AND (DECODE ((SUBSTR(PERIOD_NAME,1,3)),'Jan',1,'Feb',2,
+                                       'Mar',3,'Apr',4,
+						               'May',5,'Jun',6,
+						               'Jul',7,'Aug',8,
+						               'Sep',9,'Oct',10,
+						               'Nov',11,'Dec',12) <= (DECODE ((SUBSTR(:P_PERIOD_NAME,1,3)) ,'Jan',1,'Feb',2,
+                                                                        'Mar',3,'Apr',4,
+						                                                'May',5,'Jun',6,
+						                                                'Jul',7,'Aug',8,
+						                                                'Sep',9,'Oct',10,
+						                                                'Nov',11,'Dec',12 ))))
+--AND GB.PERIOD_NAME = :P_PERIOD_NAME
 --AND SUBSTR(GB.PERIOD_NAME,5,2) SUBSTR(:P_PERIOD_NAME)
 AND GL.NAME=:P_NAME
 --AND GCC.SEGMENT2 IN('20851','20855','20854','20856','20855','20858')
