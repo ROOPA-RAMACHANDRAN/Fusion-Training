@@ -1,86 +1,89 @@
 SELECT 
 ASSET_NUMBER,
 TO_CHAR (INVOICE_DATE,'DD-Mon-YYYY','NLS_DATE_LANGUAGE = AMERICAN')INVOICE_DATE,
+--CIP_DATE,
 INVOICE_NUM,
 TRANSFERRED_IN,
 TRANSFERRED_OUT,
-INVOICE_DATE_ADD,
+--ADDITION_DATE,
 DESCRIPTION,
 (NVL(TRANSFERRED_IN,0)-NVL(TRANSFERRED_OUT,0)) BALANCE,
-INVOICE_AMOUNT,
+INVOICE_AMOUNT COST,
 
-
-CASE WHEN TO_CHAR (INVOICE_DATE,'YY','NLS_DATE_LANGUAGE = AMERICAN')=(select substr(:p_period_name,5,2) from dual) 
-AND TO_CHAR (INVOICE_DATE_ADD,'YY','NLS_DATE_LANGUAGE = AMERICAN') IS NULL THEN TRANSFERRED_IN 
+Supplier_Name,
+CASE WHEN substr(CIP_DATE,5,2)=(select substr(:p_period_name,5,2) from dual) 
+AND ADDITION_DATE IS NULL THEN TRANSFERRED_IN 
 ELSE 0 END AS_ON_CURRENT_YEAR,
                                                                               
-CASE WHEN TO_CHAR (INVOICE_DATE,'YY','NLS_DATE_LANGUAGE = AMERICAN') < (select substr(:p_period_name,5,2) from dual)
-AND( TO_CHAR (INVOICE_DATE_ADD,'YY','NLS_DATE_LANGUAGE = AMERICAN') >= (select substr(:p_period_name,5,2) from dual) OR
-TO_CHAR (INVOICE_DATE_ADD,'YY','NLS_DATE_LANGUAGE = AMERICAN') IS NULL)
+CASE WHEN substr(CIP_DATE,5,2) < (select substr(:p_period_name,5,2) from dual)
+AND( substr(ADDITION_DATE ,5,2) >= (select substr(:p_period_name,5,2) from dual) OR
+ADDITION_DATE IS NULL)
 THEN TRANSFERRED_IN
-ELSE NULL
 END AS_ON_PREVIOUS_YEAR,
 
-CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Jan' || (select substr(:p_period_name,4,3) from dual)
+CASE WHEN CIP_DATE='Jan' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Jan' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Jan' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END JAN_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Feb' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Feb' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Feb' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Feb' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END FEB_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Mar' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Mar' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Mar' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Mar' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END MAR_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Apr' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Apr' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Apr' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Apr' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END APR_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='May' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='May' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='May' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='May' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END MAY_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Jun' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Jun' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Jun' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Jun' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END JUN_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Jul' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Jul' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Jul' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Jul' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END JUL_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Aug' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Aug' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Aug' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Aug' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END AUG_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Sep' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Sep' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Sep' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Sep' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END SEP_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Oct' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Oct' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Oct' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Oct' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END OCT_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Nov' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Nov' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Nov' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Nov' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END NOV_21,
- CASE WHEN TO_CHAR (INVOICE_DATE,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Dec' || (select substr(:p_period_name,4,3) from dual)
+ CASE WHEN CIP_DATE='Dec' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_IN 
- WHEN TO_CHAR (INVOICE_DATE_ADD,'Mon-YY','NLS_DATE_LANGUAGE = AMERICAN')='Dec' || (select substr(:p_period_name,4,3) from dual)
+ WHEN ADDITION_DATE='Dec' || (select substr(:p_period_name,4,3) from dual)
  then TRANSFERRED_OUT * -1
  END DEC_21
+ 
+ 
+ 
  
  
  
@@ -103,10 +106,24 @@ FAI.INVOICE_LINE_NUMBER=AILA.LINE_NUMBER
 AND 
 FAI.invoice_id=AIA.invoice_id
 and AILA.amount<>0
-AND AIA.INVOICE_CURRENCY_CODE='SGD'
+--AND AIA.INVOICE_CURRENCY_CODE='SGD'
 AND
 ROWNUM=1
 ) INVOICE_NUM,
+(select  distinct b.party_name
+From 
+fa_asset_invoices a,
+ap_invoices_all c,
+ap_invoice_lines_all d,
+hz_parties b
+where 
+a.asset_id=fab.asset_id
+and a.invoice_id=c.invoice_id
+and a.invoice_id=d.invoice_id
+and b.party_id = c.party_id
+and d.amount<>0
+--and c.INVOICE_CURRENCY_CODE='SGD'
+)Supplier_Name,
 (
 SELECT SUM(AILA.AMOUNT)
 From FA_ASSET_INVOICES FAI,
@@ -123,32 +140,53 @@ FAI.invoice_id=AIA.invoice_id
 and AILA.amount<>0
 AND AIA.INVOICE_CURRENCY_CODE='SGD'
 ) INVOICE_AMOUNT,
+(
+SELECT DISTINCT AIA.INVOICE_DATE
+From FA_ASSET_INVOICES FAI,
+ap_invoices_all AIA,
+ap_invoice_lines_all AILA
+where 
+FAI.asset_id=fab.asset_id
+AND
+AIA.INVOICE_ID=AILA.INVOICE_ID
+AND
+FAI.INVOICE_LINE_NUMBER=AILA.LINE_NUMBER
+AND 
+FAI.invoice_id=AIA.invoice_id
+and AILA.amount<>0
+--AND AIA.INVOICE_CURRENCY_CODE='SGD'
+) INVOICE_DATE,
 
 (SELECT 
-TH.TRANSACTION_DATE_ENTERED
+FTV.PERIOD_NAME
 FROM
 FA_TRANSACTION_HEADERS TH,
-FA_BOOKS B
+FA_BOOKS B,
+FA_TRANSACTIONS_V FTV
 WHERE
 TH.ASSET_ID=FAB.ASSET_ID
-AND
-B.TRANSACTION_HEADER_ID_IN=TH.TRANSACTION_HEADER_ID
-AND 
-TH.TRANSACTION_TYPE_CODE='CIP ADDITION' 
-AND ROWNUM=1)INVOICE_DATE,
+AND B.TRANSACTION_HEADER_ID_IN=TH.TRANSACTION_HEADER_ID
+AND TH.asset_id = FTV.asset_id
+And th.book_type_code = ftv.book_type_code
+AND TH.TRANSACTION_HEADER_ID = FTV.TRANSACTION_HEADER_ID
+AND TH.TRANSACTION_TYPE_CODE='CIP ADDITION' 
+)CIP_DATE,
 
 (SELECT 
-TH.TRANSACTION_DATE_ENTERED
+FTV.PERIOD_NAME
 FROM
 FA_TRANSACTION_HEADERS TH,
-FA_BOOKS B
+FA_BOOKS B,
+FA_TRANSACTIONS_V FTV
 WHERE
 TH.ASSET_ID=FAB.ASSET_ID
-AND
-B.TRANSACTION_HEADER_ID_IN=TH.TRANSACTION_HEADER_ID
-AND 
-TH.TRANSACTION_TYPE_CODE='ADDITION' 
-AND ROWNUM=1)INVOICE_DATE_ADD,
+AND B.TRANSACTION_HEADER_ID_IN=TH.TRANSACTION_HEADER_ID
+AND TH.asset_id = FTV.asset_id
+And th.book_type_code = ftv.book_type_code
+AND TH.TRANSACTION_HEADER_ID = FTV.TRANSACTION_HEADER_ID
+AND TH.TRANSACTION_TYPE_CODE='ADDITION' 
+AND ROWNUM=1
+)ADDITION_DATE,
 
 (SELECT 
 B.COST
@@ -161,10 +199,11 @@ AND
 B.TRANSACTION_HEADER_ID_IN=TH.TRANSACTION_HEADER_ID
 AND 
 TH.TRANSACTION_TYPE_CODE='CIP ADDITION' 
+AND ROWNUM=1
 )TRANSFERRED_IN,
 
 (SELECT 
-A.COST
+CASE WHEN H.TRANSACTION_TYPE_CODE = 'ADDITION' THEN A.COST END COST
 FROM
 FA_TRANSACTION_HEADERS H,
 FA_BOOKS A
@@ -173,7 +212,8 @@ H.ASSET_ID=FAB.ASSET_ID
 AND
 A.TRANSACTION_HEADER_ID_IN=H.TRANSACTION_HEADER_ID
 AND 
-H.TRANSACTION_TYPE_CODE='ADDITION' 
+H.TRANSACTION_TYPE_CODE IN ('ADDITION')
+AND ROWNUM=1
 )TRANSFERRED_OUT,
 -- ADJ.ADJ_COST,
 -- ret.cost_retired,
@@ -188,21 +228,83 @@ FA_ADDITIONS_TL FATL,
 --FA_TRANSACTION_HEADERS FTH,
 FA_BOOKS FB
 
+
 WHERE
 FCB.CATEGORY_ID=FAB.ASSET_CATEGORY_ID
 AND
 FATL.ASSET_ID=FAB.ASSET_ID
 AND 
 FB.ASSET_ID=FAB.ASSET_ID
+and 
+FB.book_type_code=:P_books
+AND EXISTS ( SELECT 1 FROM(SELECT 
+DISTINCT FB_1.ASSET_ID
+FROM
+FA_ADDITIONS_B FAB_1,
+FA_BOOKS FB_1,
+FA_TRANSACTION_HEADERS FTH_1
+WHERE
+FTH_1.ASSET_ID=FAB_1.ASSET_ID
+AND
+FB_1.ASSET_ID=FAB_1.ASSET_ID
+AND
+FB_1.BOOK_TYPE_CODE=FTH_1.BOOK_TYPE_CODE
+AND
+FB_1.book_type_code=:P_books
+AND
+FTH_1.TRANSACTION_TYPE_CODE = 'CIP ADDITION'
+AND
+FAB_1.ASSET_ID=FAB.ASSET_ID))
+
+AND NOT EXISTS ( SELECT 1 FROM(SELECT 
+DISTINCT FB_1.ASSET_ID
+FROM
+FA_ADDITIONS_B FAB_1,
+FA_BOOKS FB_1,
+FA_TRANSACTION_HEADERS FTH_1,
+FA_TRANSACTIONS_V FTRV
+WHERE
+FTH_1.ASSET_ID=FAB_1.ASSET_ID
+AND
+FB_1.ASSET_ID=FAB_1.ASSET_ID
+AND
+FTH_1.asset_id = FTRV.asset_id
+And fth_1.book_type_code = ftrv.book_type_code
+AND FTH_1.TRANSACTION_HEADER_ID = FTRV.TRANSACTION_HEADER_ID
+AND FB_1.BOOK_TYPE_CODE=FTH_1.BOOK_TYPE_CODE
+AND FB_1.book_type_code=:P_books
+AND FTH_1.TRANSACTION_TYPE_CODE = 'ADDITION'
+AND SUBSTR(FTRV.PERIOD_NAME,5,2) = TO_NUMBER(SUBSTR(:p_period_name,5,2))-1
+AND FAB_1.ASSET_ID=FAB.ASSET_ID))
+
+AND NOT EXISTS ( SELECT 1 FROM(SELECT 
+DISTINCT FB_1.ASSET_ID
+FROM
+FA_ADDITIONS_B FAB_1,
+FA_BOOKS FB_1,
+FA_TRANSACTION_HEADERS FTH_1,
+FA_TRANSACTIONS_V FTRV
+WHERE
+FTH_1.ASSET_ID=FAB_1.ASSET_ID
+AND
+FB_1.ASSET_ID=FAB_1.ASSET_ID
+AND
+FTH_1.asset_id = FTRV.asset_id
+And fth_1.book_type_code = ftrv.book_type_code
+AND FTH_1.TRANSACTION_HEADER_ID = FTRV.TRANSACTION_HEADER_ID
+AND FB_1.BOOK_TYPE_CODE=FTH_1.BOOK_TYPE_CODE
+AND FB_1.book_type_code=:P_books
+AND FTH_1.TRANSACTION_TYPE_CODE = 'CIP ADDITION'
+AND SUBSTR(FTRV.PERIOD_NAME,5,2) > TO_NUMBER(SUBSTR(:p_period_name,5,2))
+AND FAB_1.ASSET_ID=FAB.ASSET_ID))
+
 
 )MAIN
- WHERE
-ASSET_NUMBER IN ('580','588','600','606','607','594')
--- AND 
--- INVOICE_DATE_ADD IS NULL
- GROUP BY ASSET_NUMBER,DESCRIPTION,INVOICE_NUM,INVOICE_AMOUNT,TRANSFERRED_IN,
-TRANSFERRED_OUT,INVOICE_DATE,INVOICE_DATE_ADD
+ --WHERE
+--ASSET_NUMBER IN ('580','588','600','606','607','594')
 
+ GROUP BY ASSET_NUMBER,DESCRIPTION,INVOICE_NUM,INVOICE_AMOUNT,TRANSFERRED_IN,
+TRANSFERRED_OUT,INVOICE_DATE,CIP_DATE,ADDITION_DATE,Supplier_Name
 
 
 
