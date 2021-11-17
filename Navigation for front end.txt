@@ -1,0 +1,2 @@
+Project-->Project financial Management-->search -->put Project number alone then search-->Project(click)-->we can view the data
+Fixed assets-->asset inquiry-->put asset number,book type-code-->search-->view invoice details(source line)/view transaction details(Transaction)
