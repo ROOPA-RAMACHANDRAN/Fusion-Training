@@ -10,7 +10,7 @@ select  MAIN.asset_number,
 MAIN.DEPRN_START_DATE,
 MAIN.ORIGINAL_COST,
 substr(:p_period_name,5,2) year,
-(select fdp5.FISCAL_YEAR from FA_DEPRN_PERIODS fdp5 where fdp5.period_name=:p_period_name) run_year,
+(select distinct fdp5.FISCAL_YEAR from FA_DEPRN_PERIODS fdp5 where fdp5.period_name=:p_period_name) run_year,
 asset_year.FISCAL_YEAR,
 invoice_date,
 invoice_num ,
@@ -20,7 +20,7 @@ description,
 ATTRIBUTE_CATEGORY_CODE,
 CATEGORY,
 account_code,
-case when (select fdp5.FISCAL_YEAR from FA_DEPRN_PERIODS fdp5 where fdp5.period_name=:p_period_name) = asset_year.FISCAL_YEAR then
+case when (select distinct fdp5.FISCAL_YEAR from FA_DEPRN_PERIODS fdp5 where fdp5.period_name=:p_period_name) = asset_year.FISCAL_YEAR then
 null
 else 
 COST end COST,
@@ -231,7 +231,7 @@ And FAB.ASSET_TYPE='CAPITALIZED'
 and fdd.ASSET_ID =fab.asset_id
 AND FDP.PERIOD_COUNTER=FDD.PERIOD_COUNTER
 --AND FISCAL_YEAR IN ( SELECT FISCAL_YEAR FROM FA_DEPRN_PERIODS WHERE PERIOD_NAME=:p_period_name )
-and FDP.period_num <=( select PERIOD_NUM from FA_DEPRN_PERIODS where PERIOD_NAME=:p_period_name)
+and FDP.period_num <=( select distinct PERIOD_NUM from FA_DEPRN_PERIODS where PERIOD_NAME=:p_period_name)
 and FDP.book_type_code like  :p_books   ---'CCHMS CORP BOOK'
 and FDP.book_type_code=FDD.book_type_code
 --AND fab.ASSET_NUMBER in ('364','363','362','370','373')
